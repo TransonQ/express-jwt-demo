@@ -84,16 +84,20 @@ app.post('/token', (req, res) => {
 // 测试访问受保护的路由
 app.get('/protected', (req, res) => {
   const authHeader = req.headers.authorization;
-  console.log('authHeader: ', authHeader);
-  const token = authHeader;
-  console.log('token: ', token);
+  const token = authHeader
 
   if (!token) {
     return res.status(401).json({ error: '缺少 Access Token' });
   }
 
   try {
-    const user = jwt.verify(token, ACCESS_TOKEN_SECRET); // 验证 Access Token
+    const user = jwt.verify(token, ACCESS_TOKEN_SECRET, (err, user) => {
+      if (err) {
+        return res.status(401).json({ error: '无效的 Access Token' });
+      }
+      req.user = user;
+      res.json({ message: `欢迎, ${user.username}` });
+    }); // 验证 Access Token
     res.json({ message: `欢迎, ${user.username}` });
   } catch (err) {
     res.status(403).json({ error: '无效的 Access Token' });
