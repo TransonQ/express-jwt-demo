@@ -68,9 +68,14 @@ app.post('/token', (req, res) => {
     const accessToken = jwt.sign(
       { username: user.username },
       ACCESS_TOKEN_SECRET,
-      { expiresIn: '15m' },
+      { expiresIn: '1m' },
     ); // 生成新的 Access Token
-    res.json({ accessToken });
+    const refreshToken = jwt.sign(
+      { username: user.username },
+      REFRESH_TOKEN_SECRET,
+      { expiresIn: '2m' },
+    ); // 生成新的 Refresh Token
+    res.json({ accessToken, refreshToken });
   } catch (err) {
     res.status(403).json({ error: '无效的 Refresh Token' });
   }
@@ -79,7 +84,9 @@ app.post('/token', (req, res) => {
 // 测试访问受保护的路由
 app.get('/protected', (req, res) => {
   const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.split(' ')[1];
+  console.log('authHeader: ', authHeader);
+  const token = authHeader;
+  console.log('token: ', token);
 
   if (!token) {
     return res.status(401).json({ error: '缺少 Access Token' });
