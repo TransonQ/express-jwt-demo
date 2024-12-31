@@ -5,7 +5,7 @@ import { CookieKeys, cookies } from '../utils/cookies';
 
 export function Login() {
   const navigate = useNavigate();
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState('Transon');
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
   };
