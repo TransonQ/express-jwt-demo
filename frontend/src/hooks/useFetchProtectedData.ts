@@ -12,7 +12,12 @@ export function useFetchProtectedData(params?: Record<string, any>) {
       params,
     },
     ({ params }) => getProtectedInfo(params),
-    { keepPreviousData: false },
+    {
+      keepPreviousData: false,
+      onError() {
+        mutate(undefined, false);
+      },
+    },
   );
 
   return {
