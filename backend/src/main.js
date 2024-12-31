@@ -24,13 +24,11 @@ const app = express();
 app.use(bodyParser.json());
 
 // 模拟的密钥（生产环境下请存放在环境变量中）
-const ACCESS_TOKEN_SECRET =
-  process.env.ACCESS_TOKEN_SECRET || 'your-access-token-secret';
-const REFRESH_TOKEN_SECRET =
-  process.env.REFRESH_TOKEN_SECRET || 'your-refresh-token-secret';
-const ACCESS_TOKEN_EXPIRATION = process.env.ACCESS_TOKEN_EXPIRATION || '15m';
-const REFRESH_TOKEN_EXPIRATION = process.env.REFRESH_TOKEN_EXPIRATION || '7d';
-const PORT = process.env.PORT || 3010;
+const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
+const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
+const ACCESS_TOKEN_EXPIRATION = process.env.ACCESS_TOKEN_EXPIRATION;
+const REFRESH_TOKEN_EXPIRATION = process.env.REFRESH_TOKEN_EXPIRATION;
+const PORT = process.env.PORT;
 
 // 存储 Refresh Token 的模拟数据库
 const refreshTokens = [];
