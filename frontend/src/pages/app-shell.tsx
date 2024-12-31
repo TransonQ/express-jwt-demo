@@ -2,7 +2,9 @@ import { Link } from 'react-router';
 import { useFetchProtectedData } from '../hooks';
 
 export function AppShell() {
-  const { reponse, error, isLoading, isValidating } = useFetchProtectedData();
+  const { reponse, error, isLoading, isValidating } = useFetchProtectedData({
+    msg: 'This is a request with Authentication',
+  });
 
   return (
     <>
