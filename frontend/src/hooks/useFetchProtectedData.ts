@@ -15,7 +15,7 @@ export function useFetchProtectedData(params?: Record<string, any>) {
   );
 
   return {
-    data,
+    reponse: data,
     error,
     isLoading,
     isValidating,

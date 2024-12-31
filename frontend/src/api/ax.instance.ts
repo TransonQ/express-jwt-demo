@@ -3,6 +3,7 @@ import axios, {
   type AxiosResponse,
   type InternalAxiosRequestConfig,
 } from 'axios';
+import { CookieKeys, cookies } from '../utils/cookies';
 
 // 创建axios实例
 const ax = axios.create({
@@ -12,6 +13,8 @@ const ax = axios.create({
 // 请求拦截器
 ax.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
+    const accessToken = cookies.get(CookieKeys['ACCESS-TOKEN']);
+    config.headers['Authorization'] = accessToken;
     return config;
   },
   (error: AxiosError) => {

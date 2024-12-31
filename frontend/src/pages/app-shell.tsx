@@ -2,7 +2,7 @@ import { Link } from 'react-router';
 import { useFetchProtectedData } from '../hooks';
 
 export function AppShell() {
-  const { data, error, isLoading, isValidating } = useFetchProtectedData();
+  const { reponse, error, isLoading, isValidating } = useFetchProtectedData();
 
   return (
     <>
@@ -27,9 +27,9 @@ export function AppShell() {
           )}
         </pre>
       )}
-      {!data ? null : (
-        <pre className="p-4 border border-orange-500 rounded-2xl m-4">
-          {JSON.stringify(data, null, 2)}
+      {!reponse ? null : (
+        <pre className="p-4 border border-orange-400 rounded-2xl m-4">
+          {JSON.stringify(reponse.data, null, 2)}
         </pre>
       )}
     </>
