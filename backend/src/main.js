@@ -2,6 +2,9 @@
 import express from 'express'; // Express 框架
 import jwt from 'jsonwebtoken'; // 生成和验证 JWT
 import bodyParser from 'body-parser'; // 解析请求体
+import dotenv from 'dotenv'; // 加载环境变量
+
+dotenv.config(); // 加载 .env 文件中的环境变量
 
 /** 
  * 功能说明
@@ -21,8 +24,13 @@ const app = express();
 app.use(bodyParser.json());
 
 // 模拟的密钥（生产环境下请存放在环境变量中）
-const ACCESS_TOKEN_SECRET = 'your-access-token-secret';
-const REFRESH_TOKEN_SECRET = 'your-refresh-token-secret';
+const ACCESS_TOKEN_SECRET =
+  process.env.ACCESS_TOKEN_SECRET || 'your-access-token-secret';
+const REFRESH_TOKEN_SECRET =
+  process.env.REFRESH_TOKEN_SECRET || 'your-refresh-token-secret';
+const ACCESS_TOKEN_EXPIRATION = process.env.ACCESS_TOKEN_EXPIRATION || '15m';
+const REFRESH_TOKEN_EXPIRATION = process.env.REFRESH_TOKEN_EXPIRATION || '7d';
+const PORT = process.env.PORT || 3010;
 
 // 存储 Refresh Token 的模拟数据库
 const refreshTokens = [];
@@ -41,11 +49,13 @@ app.post('/login', (req, res) => {
 
   // 生成 Access Token
   const accessToken = jwt.sign({ username }, ACCESS_TOKEN_SECRET, {
-    expiresIn: '15m',
+    expiresIn: ACCESS_TOKEN_EXPIRATION,
   });
 
   // 生成 Refresh Token
-  const refreshToken = jwt.sign({ username }, REFRESH_TOKEN_SECRET);
+  const refreshToken = jwt.sign({ username }, REFRESH_TOKEN_SECRET, {
+    expiresIn: REFRESH_TOKEN_EXPIRATION,
+  });
   refreshTokens.push(refreshToken); // 存储 Refresh Token
 
   res.json({ accessToken, refreshToken });
@@ -91,21 +101,20 @@ app.get('/protected', (req, res) => {
   }
 
   try {
-    const user = jwt.verify(token, ACCESS_TOKEN_SECRET, (err, user) => {
+    jwt.verify(token, ACCESS_TOKEN_SECRET, (err, user) => {
       if (err) {
         return res.status(401).json({ error: '无效的 Access Token' });
       }
       req.user = user;
-      res.json({ message: `欢迎, ${user.username}` });
+      const query = req.query;
+      res.json({ message: `欢迎, ${user.username}`, query });
     }); // 验证 Access Token
-    res.json({ message: `欢迎, ${user.username}` });
   } catch (err) {
     res.status(403).json({ error: '无效的 Access Token' });
   }
 });
 
 // 启动服务器
-const PORT = 3010;
 app.listen(PORT, () => {
   console.log(`服务器运行在 http://localhost:${PORT}`);
 });
