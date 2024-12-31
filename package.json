@@ -5,7 +5,8 @@
   "main": "./src/main.js",
   "type": "module",
   "scripts": {
-    "dev": "node --watch ./src/main.js"
+    "server": "pnpm -F backend run server",
+    "dev": "pnpm -F frontend run dev"
   },
   "keywords": [],
   "author": "",

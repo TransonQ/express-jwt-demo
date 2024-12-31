@@ -84,7 +84,7 @@ app.post('/token', (req, res) => {
 // 测试访问受保护的路由
 app.get('/protected', (req, res) => {
   const authHeader = req.headers.authorization;
-  const token = authHeader
+  const token = authHeader;
 
   if (!token) {
     return res.status(401).json({ error: '缺少 Access Token' });
@@ -105,7 +105,7 @@ app.get('/protected', (req, res) => {
 });
 
 // 启动服务器
-const PORT = 3000;
+const PORT = 3010;
 app.listen(PORT, () => {
   console.log(`服务器运行在 http://localhost:${PORT}`);
 });

@@ -1,0 +1,11 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "server": "node --watch ./src/main.js"
+  },
+  "keywords": [],
+  "author": ""
+}
