@@ -9,8 +9,7 @@
     "dev": "pnpm -F frontend run dev"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Transon <https://github.com/TransonQ>",
   "dependencies": {
     "body-parser": "^1.20.3",
     "express": "^4.21.2",
