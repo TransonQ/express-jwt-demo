@@ -6,7 +6,9 @@ settings:
 
 importers:
 
-  .:
+  .: {}
+
+  backend:
     dependencies:
       body-parser:
         specifier: ^1.20.3
@@ -17,8 +19,6 @@ importers:
       jsonwebtoken:
         specifier: ^9.0.2
         version: 9.0.2
-
-  backend: {}
 
   frontend:
     dependencies:
