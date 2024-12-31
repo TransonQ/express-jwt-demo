@@ -23,7 +23,6 @@ accessToken 有效期为 15 分钟，refreshToken 没有过期时间（实际场
 const app = express();
 app.use(bodyParser.json());
 
-// 模拟的密钥（生产环境下请存放在环境变量中）
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 const ACCESS_TOKEN_EXPIRATION = process.env.ACCESS_TOKEN_EXPIRATION;
@@ -76,12 +75,12 @@ app.post('/token', (req, res) => {
     const accessToken = jwt.sign(
       { username: user.username },
       ACCESS_TOKEN_SECRET,
-      { expiresIn: '1m' },
+      { expiresIn: ACCESS_TOKEN_EXPIRATION },
     ); // 生成新的 Access Token
     const refreshToken = jwt.sign(
       { username: user.username },
       REFRESH_TOKEN_SECRET,
-      { expiresIn: '2m' },
+      { expiresIn: REFRESH_TOKEN_EXPIRATION },
     ); // 生成新的 Refresh Token
     res.json({ accessToken, refreshToken });
   } catch (err) {
