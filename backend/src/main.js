@@ -32,7 +32,7 @@ const REFRESH_TOKEN_EXPIRATION = process.env.REFRESH_TOKEN_EXPIRATION;
 const PORT = process.env.PORT;
 
 // 存储 Refresh Token 的模拟数据库
-const refreshTokens = [];
+const RefreshTokensDB = [];
 
 // 根路由是测试路由
 app.get('/', (req, res) => {
@@ -55,25 +55,25 @@ app.post('/login', (req, res) => {
   const refreshToken = jwt.sign({ username }, REFRESH_TOKEN_SECRET, {
     expiresIn: REFRESH_TOKEN_EXPIRATION,
   });
-  refreshTokens.push(refreshToken); // 存储 Refresh Token
+  RefreshTokensDB.push(refreshToken); // 存储 Refresh Token
 
   res.json({ accessToken, refreshToken });
 });
 
 // 刷新 Access Token 的接口
 app.post('/token', (req, res) => {
-  const { token } = req.body;
+  const { refresh_token } = req.body;
 
-  if (!token) {
+  if (!refresh_token) {
     return res.status(401).json({ error: '缺少 Refresh Token' });
   }
 
-  if (!refreshTokens.includes(token)) {
+  if (!RefreshTokensDB.includes(refresh_token)) {
     return res.status(403).json({ error: '无效的 Refresh Token' });
   }
 
   try {
-    const user = jwt.verify(token, REFRESH_TOKEN_SECRET); // 验证 Refresh Token
+    const user = jwt.verify(refresh_token, REFRESH_TOKEN_SECRET); // 验证 Refresh Token
     const accessToken = jwt.sign(
       { username: user.username },
       ACCESS_TOKEN_SECRET,
