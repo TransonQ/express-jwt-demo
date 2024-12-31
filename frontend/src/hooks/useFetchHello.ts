@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react';
-import { getHello } from '../api/hello.api';
+import { getHello } from '../api/examples.api';
 
 export function useFetchHello() {
   const fetcher = useCallback(async () => {
