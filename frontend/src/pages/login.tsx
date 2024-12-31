@@ -1,7 +1,10 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 import { postLogin } from '../api/examples.api';
+import { CookieKeys, cookies } from '../utils/cookies';
 
 export function Login() {
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
@@ -9,10 +12,15 @@ export function Login() {
   const onLogin = async () => {
     if (!username?.trim()) {
       alert('Please enter a username');
+      return;
     }
 
     const response = await postLogin(username);
-    console.log('response: ', response);
+    const { data } = response;
+    cookies.set(CookieKeys['ACCESS-TOKEN'], data.accessToken);
+    cookies.set(CookieKeys['REFRESH-TOKEN'], data.refreshToken);
+
+    navigate('/app');
   };
 
   return (
