@@ -1,8 +1,9 @@
 // 引入必要的模块
+import bodyParser from 'body-parser'; // 解析请求体
+import cors from 'cors'; // 跨域资源共享
+import dotenv from 'dotenv'; // 加载环境变量
 import express from 'express'; // Express 框架
 import jwt from 'jsonwebtoken'; // 生成和验证 JWT
-import bodyParser from 'body-parser'; // 解析请求体
-import dotenv from 'dotenv'; // 加载环境变量
 
 dotenv.config(); // 加载 .env 文件中的环境变量
 
@@ -22,6 +23,7 @@ accessToken 有效期为 15 分钟，refreshToken 没有过期时间（实际场
 // 初始化 Express 应用
 const app = express();
 app.use(bodyParser.json());
+app.use(cors()); // 使用 cors 中间件
 
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
