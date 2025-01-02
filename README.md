@@ -1,3 +1,12 @@
+# README
+
+## 使用步骤
+
+1. `git clone https://github.com/TransonQ/express-jwt-demo.git`
+2. `cd express-jwt-demo`
+3. `pnpm run server` 启动后端服务.
+4. `pnpm run dev` 新终端窗口启动前端预览.
+
 ## 功能说明
 
 - [接口文档](./backend/README.md)
