@@ -56,7 +56,7 @@ export function AppShell() {
             key={index}
             className="p-4 border border-green-500 rounded-2xl m-4"
           >
-            {JSON.stringify(reponse, null, 2)}
+            {JSON.stringify(reponse.data, null, 2)}
           </pre>
         ),
       )}

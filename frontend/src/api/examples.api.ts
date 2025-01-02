@@ -11,11 +11,11 @@ export const postLogin = (username: string) =>
     data: { username },
   });
 
-export const postRefrehToken = () =>
+export const postRefrehToken = (refresh_token: string) =>
   ax.request({
     method: 'POST',
     url: '/token',
-    data: {},
+    data: { refresh_token },
   });
 
 export const getProtectedInfo = (params?: Record<string, any>) =>
