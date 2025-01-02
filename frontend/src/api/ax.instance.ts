@@ -1,13 +1,12 @@
 import axios, {
   type AxiosError,
   type AxiosResponse,
-  type InternalAxiosRequestConfig as OriginalInternalAxiosRequestConfig,
+  type InternalAxiosRequestConfig,
 } from 'axios';
 import { CookieKeys, cookies } from '../utils/cookies';
 import { postRefrehToken } from './examples.api';
 
-interface InternalAxiosRequestConfig
-  extends OriginalInternalAxiosRequestConfig {
+interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
 }
 
@@ -23,23 +22,26 @@ ax.interceptors.request.use(onRequest, onRequestError);
 ax.interceptors.response.use(onResponse, onResponseError);
 
 // 公共的请求拦截器
-function onRequest(config: InternalAxiosRequestConfig) {
+function onRequest(config: CustomAxiosRequestConfig) {
+  // handleExampleRequest(config);
   const accessToken = cookies.get(CookieKeys['ACCESS-TOKEN']);
   config.headers['Authorization'] = accessToken;
   return config;
 }
 // 公共的请求错误拦截器
 function onRequestError(error: AxiosError) {
+  // hanldeExampleError(error);
   return Promise.reject(error);
 }
 
 // 公共的响应拦截器
 function onResponse(response: AxiosResponse) {
+  // hanldeExampleError(error);
   return response;
 }
 // 公共的响应错误拦截器
 async function onResponseError(error: AxiosError) {
-  const originalRequest = error.config as InternalAxiosRequestConfig;
+  const originalRequest = error.config as CustomAxiosRequestConfig;
 
   if (error.response?.status === 401 && !originalRequest?._retry) {
     originalRequest._retry = true;
