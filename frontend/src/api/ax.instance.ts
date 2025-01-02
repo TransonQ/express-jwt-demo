@@ -63,6 +63,7 @@ async function onResponseError(error: AxiosError) {
       return ax(originalRequest);
     } catch {
       // Handle refresh token error or redirect to login
+      window.location.href = '/login';
     }
   }
 
