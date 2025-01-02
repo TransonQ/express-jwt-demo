@@ -9,17 +9,10 @@ export function AppShell() {
   } = useFetchProtectedData({
     msg: 'example_1',
   });
-  const {
-    reponse: reponse2,
-    error: error2,
-    isValidating: isFetching2,
-  } = useFetchProtectedData({
-    msg: 'example_2',
-  });
 
-  const errors = [error1, error2];
-  const reponses = [reponse1, reponse2];
-  const loading = isFetching1 || isFetching2;
+  const errors = [error1];
+  const reponses = [reponse1];
+  const loading = isFetching1;
 
   return (
     <>

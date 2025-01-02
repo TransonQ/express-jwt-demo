@@ -17,49 +17,57 @@ const ax = axios.create({
 });
 
 // 请求拦截器
-ax.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => {
-    const accessToken = cookies.get(CookieKeys['ACCESS-TOKEN']);
-    config.headers['Authorization'] = accessToken;
-    return config;
-  },
-  (error: AxiosError) => {
-    return Promise.reject(error);
-  },
-);
+ax.interceptors.request.use(onRequest, onRequestError);
 
 // 响应拦截器
-ax.interceptors.response.use(
-  (response: AxiosResponse) => {
-    return response;
-  },
-  async (error: AxiosError) => {
-    const originalRequest = error.config as InternalAxiosRequestConfig;
+ax.interceptors.response.use(onResponse, onResponseError);
 
-    if (error.response?.status === 401 && !originalRequest?._retry) {
-      originalRequest._retry = true;
+// 公共的请求拦截器
+function onRequest(config: InternalAxiosRequestConfig) {
+  const accessToken = cookies.get(CookieKeys['ACCESS-TOKEN']);
+  config.headers['Authorization'] = accessToken;
+  return config;
+}
+// 公共的请求错误拦截器
+function onRequestError(error: AxiosError) {
+  return Promise.reject(error);
+}
 
-      try {
-        const refreshToken = cookies.get(CookieKeys['REFRESH-TOKEN']);
-        if (!refreshToken) return;
-        const axiosResponse = await postRefrehToken(refreshToken);
-        const { data } = axiosResponse;
+// 公共的响应拦截器
+function onResponse(response: AxiosResponse) {
+  return response;
+}
+// 公共的响应错误拦截器
+async function onResponseError(error: AxiosError) {
+  const originalRequest = error.config as InternalAxiosRequestConfig;
 
-        cookies.set(CookieKeys['ACCESS-TOKEN'], data.accessToken);
-        cookies.set(CookieKeys['REFRESH-TOKEN'], data.refreshToken);
+  if (error.response?.status === 401 && !originalRequest?._retry) {
+    originalRequest._retry = true;
 
-        // Retry the original request with the new token
-        // 重新发起请求
-        originalRequest.headers.Authorization = data.accessToken;
+    try {
+      const refreshToken = cookies.get(CookieKeys['REFRESH-TOKEN']);
+      if (!refreshToken) return;
+      const axiosResponse = await postRefrehToken(refreshToken);
+      const { data } = axiosResponse;
 
-        // 返回重新发起请求的结果
-        return ax(originalRequest);
-      } catch {
-        // Handle refresh token error or redirect to login
-      }
+      cookies.set(CookieKeys['ACCESS-TOKEN'], data.accessToken);
+      cookies.set(CookieKeys['REFRESH-TOKEN'], data.refreshToken);
+
+      // Retry the original request with the new token
+      // 重新发起请求
+      originalRequest.headers.Authorization = data.accessToken;
+
+      // 返回重新发起请求的结果
+      return ax(originalRequest);
+    } catch {
+      // Handle refresh token error or redirect to login
     }
-    return Promise.reject(error);
-  },
-);
+  }
+
+  // other error handling ... ...
+  // // hanldeExampleError(error);
+
+  return Promise.reject(error);
+}
 
 export { ax };
