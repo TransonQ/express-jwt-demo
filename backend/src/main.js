@@ -55,7 +55,9 @@ app.post('/login', (req, res) => {
   const refreshToken = jwt.sign({ username }, REFRESH_TOKEN_SECRET, {
     expiresIn: REFRESH_TOKEN_EXPIRATION,
   });
-  RefreshTokensDB.push(refreshToken); // 存储 Refresh Token
+
+  // 存储 Refresh Token
+  RefreshTokensDB.push(refreshToken);
 
   res.json({ accessToken, refreshToken });
 });
@@ -86,7 +88,7 @@ app.post('/token', (req, res) => {
       REFRESH_TOKEN_SECRET,
       { expiresIn: REFRESH_TOKEN_EXPIRATION },
     );
-    // 更新 Refresh Token
+    // 储存 Refresh Token
     RefreshTokensDB.push(refreshToken);
 
     res.json({ accessToken, refreshToken });
@@ -105,6 +107,7 @@ app.get('/protected', (req, res) => {
   }
 
   try {
+    // 验证 Access Token
     jwt.verify(token, ACCESS_TOKEN_SECRET, (err, user) => {
       if (err) {
         return res.status(401).json({ error: '无效的 Access Token' });
@@ -112,7 +115,7 @@ app.get('/protected', (req, res) => {
       req.user = user;
       const query = req.query;
       res.json({ message: `欢迎, ${user.username}`, query });
-    }); // 验证 Access Token
+    });
   } catch (err) {
     res.status(403).json({ error: '无效的 Access Token' });
   }
