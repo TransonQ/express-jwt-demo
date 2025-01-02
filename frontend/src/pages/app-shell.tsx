@@ -2,9 +2,24 @@ import { Link } from 'react-router';
 import { useFetchProtectedData } from '../hooks';
 
 export function AppShell() {
-  const { reponse, error, isLoading, isValidating } = useFetchProtectedData({
-    msg: 'This is a request with Authentication',
+  const {
+    reponse: reponse1,
+    error: error1,
+    isValidating: isFetching1,
+  } = useFetchProtectedData({
+    msg: 'example_1',
   });
+  const {
+    reponse: reponse2,
+    error: error2,
+    isValidating: isFetching2,
+  } = useFetchProtectedData({
+    msg: 'example_2',
+  });
+
+  const errors = [error1, error2];
+  const reponses = [reponse1, reponse2];
+  const loading = isFetching1 || isFetching2;
 
   return (
     <>
@@ -15,24 +30,35 @@ export function AppShell() {
         </Link>
       </div>
 
-      <p className="h-2 mx-4">{(isLoading || isValidating) && 'loaidng...'}</p>
+      <p className="h-2 mx-4">{loading && 'loaidng...'}</p>
 
-      {!error ? null : (
-        <pre className="p-4 border border-red-500 rounded-2xl m-4">
-          {JSON.stringify(
-            {
-              error: error.message,
-              status: error.status,
-            },
-            null,
-            2,
-          )}
-        </pre>
+      {errors.map((error, index) =>
+        !error ? null : (
+          <pre
+            key={index}
+            className="p-4 border border-red-500 rounded-2xl m-4"
+          >
+            {JSON.stringify(
+              {
+                error: error.message,
+                status: error.status,
+              },
+              null,
+              2,
+            )}
+          </pre>
+        ),
       )}
-      {!reponse ? null : (
-        <pre className="p-4 border border-orange-400 rounded-2xl m-4">
-          {JSON.stringify(reponse.data, null, 2)}
-        </pre>
+
+      {reponses.map((reponse, index) =>
+        !reponse ? null : (
+          <pre
+            key={index}
+            className="p-4 border border-green-500 rounded-2xl m-4"
+          >
+            {JSON.stringify(reponse, null, 2)}
+          </pre>
+        ),
       )}
     </>
   );
