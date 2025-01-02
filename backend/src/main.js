@@ -74,16 +74,21 @@ app.post('/token', (req, res) => {
 
   try {
     const user = jwt.verify(refresh_token, REFRESH_TOKEN_SECRET); // 验证 Refresh Token
+    // 生成新的 Access Token
     const accessToken = jwt.sign(
       { username: user.username },
       ACCESS_TOKEN_SECRET,
       { expiresIn: ACCESS_TOKEN_EXPIRATION },
-    ); // 生成新的 Access Token
+    );
+    // 生成新的 Refresh Token
     const refreshToken = jwt.sign(
       { username: user.username },
       REFRESH_TOKEN_SECRET,
       { expiresIn: REFRESH_TOKEN_EXPIRATION },
-    ); // 生成新的 Refresh Token
+    );
+    // 更新 Refresh Token
+    RefreshTokensDB.push(refreshToken);
+
     res.json({ accessToken, refreshToken });
   } catch (err) {
     res.status(403).json({ error: '无效的 Refresh Token' });
