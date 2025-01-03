@@ -1,5 +1,7 @@
 # README
 
+![demo](image.png)
+
 ## 使用步骤
 
 1. `git clone https://github.com/TransonQ/express-jwt-demo.git`
