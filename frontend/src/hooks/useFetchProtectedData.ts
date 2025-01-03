@@ -13,7 +13,7 @@ export function useFetchProtectedData(params?: Record<string, any>) {
     },
     ({ params }) => getProtectedInfo(params),
     {
-      refreshInterval: 20 * 1000,
+      refreshInterval: 10 * 1000,
       keepPreviousData: false,
       onError() {
         mutate(undefined, false);
